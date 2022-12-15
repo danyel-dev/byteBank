@@ -41,7 +41,7 @@ namespace byteBank
                 Console.Write("Para terminar, nos informe uma senha forte: ");
                 senhas.Add(Console.ReadLine());
 
-                Console.Write("\nUsuário cadastrado com sucesso!!");
+                Console.WriteLine("\nUsuário cadastrado com sucesso!!");
             } 
             else
             {
