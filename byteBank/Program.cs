@@ -23,7 +23,40 @@ namespace byteBank
 
         static void Main(string[] args)
         {
-            showMenu();
+            int option;
+
+            do {
+                showMenu();
+                option = int.Parse(Console.ReadLine());  
+
+                switch(option)
+                {
+                    case 0:
+                        Console.WriteLine("Obrigado por utilizar esse programa");
+                        break;
+                    case 1:
+                        Console.WriteLine("Opção 01");
+                        break;
+                    case 2:
+                        Console.WriteLine("Opção 02");
+                        break;
+                    case 3:
+                        Console.WriteLine("Opção 03");
+                        break;
+                    case 4:
+                        Console.WriteLine("Opção 04");
+                        break;
+                    case 5:
+                        Console.WriteLine("Opção 05");
+                        break;
+                    case 6:
+                        Console.WriteLine("Opção 06");
+                        break;
+                    default:
+                        Console.WriteLine("Opção inválida");
+                        break;
+                }
+            } while(option != 0);
         }
     }
 }
