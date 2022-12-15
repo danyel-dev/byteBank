@@ -21,9 +21,59 @@ namespace byteBank
             Console.WriteLine("-------------------------------");
         }
 
+        static void insertUser(List<string> cpfs, List<string> titulares, List<string> senhas, List<string> saldos)
+        {
+            Console.WriteLine();
+
+            Console.Write("Informe o seu CPF: ");
+            string cpf = Console.ReadLine();
+
+            if(!cpfs.Contains(cpf))
+            {
+                cpfs.Add(cpf);
+                Console.WriteLine();
+
+                Console.Write("Agora, nós informe o nome do titular: ");
+                titulares.Add(Console.ReadLine());
+
+                Console.WriteLine();
+
+                Console.Write("Para terminar, nos informe uma senha forte: ");
+                senhas.Add(Console.ReadLine());
+
+                Console.Write("\nUsuário cadastrado com sucesso!!");
+            } 
+            else
+            {
+                Console.WriteLine("\nEste CPF já está registrado!!");
+            }
+        }
+
+        static void detailUser(List<string> cpfs, List<string> titulares, List<string> senhas, List<string> saldos) 
+        {
+            Console.WriteLine("Informe o cpf do usuário: ");
+            string cpf = Console.ReadLine();
+
+            if (cpfs.Contains(cpf))
+            {
+                string elemento = cpfs.Find(item => item == cpf);
+
+                Console.WriteLine(elemento);
+            } 
+            else
+            {
+                Console.WriteLine("Número de CPF não encontrado!");
+            }
+        }
+
         static void Main(string[] args)
         {
             int option;
+
+            List<string> cpfs = new();
+            List<string> titulares = new();
+            List<string> senhas = new();
+            List<string> saldos = new();
 
             do {
                 showMenu();
@@ -32,10 +82,10 @@ namespace byteBank
                 switch(option)
                 {
                     case 0:
-                        Console.WriteLine("Obrigado por utilizar esse programa");
+                        Console.WriteLine("Obrigado por utilizar o programa, Bye Bye!!");
                         break;
                     case 1:
-                        Console.WriteLine("Opção 01");
+                        insertUser(cpfs, titulares, senhas, saldos);
                         break;
                     case 2:
                         Console.WriteLine("Opção 02");
@@ -44,7 +94,7 @@ namespace byteBank
                         Console.WriteLine("Opção 03");
                         break;
                     case 4:
-                        Console.WriteLine("Opção 04");
+                        detailUser(cpfs, titulares, senhas, saldos);
                         break;
                     case 5:
                         Console.WriteLine("Opção 05");
