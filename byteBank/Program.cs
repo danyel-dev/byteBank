@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Reflection;
-
 
 namespace byteBank
 {
@@ -77,6 +75,7 @@ namespace byteBank
                 Console.WriteLine("Conta deletada com sucesso!!\n");
             }
         }
+
         static void listAllCounts(List<string> cpfs, List<string> titulares, List<string> senhas, List<double> saldos)
         {
             for(int i = 0; i < cpfs.Count; i++)
@@ -92,6 +91,7 @@ namespace byteBank
             Console.ReadLine();
             Console.Clear();
         }
+
         static void detailUser(List<string> cpfs, List<string> titulares, List<double> saldos) 
         {
             Console.Write("Informe o cpf do usuário: ");
@@ -117,6 +117,14 @@ namespace byteBank
                 Console.WriteLine("Número de CPF não encontrado!\n");
             }
 
+        }
+
+        static void valueInBank(List<double> saldos) 
+        {
+            Console.WriteLine($"Quantia total armazenada no banco: {saldos.Sum(saldo => saldo)}");
+            Console.Write("\nPressione enter para voltar ao menu...");
+            Console.ReadLine();
+            Console.Clear();
         }
 
         static void Main(string[] args)
@@ -152,6 +160,7 @@ namespace byteBank
                         detailUser(cpfs, titulares, saldos);
                         break;
                     case 5:
+                        valueInBank(saldos);
                         Console.WriteLine("Opção 05");
                         break;
                     case 6:
