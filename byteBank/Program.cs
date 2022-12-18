@@ -12,11 +12,10 @@ namespace byteBank
             Console.WriteLine(" 3 - Listar todas as contas registradas");
             Console.WriteLine(" 4 - Detalhes de um usuário");
             Console.WriteLine(" 5 - Quantia armazenada no banco");
-            Console.WriteLine(" 6 - Manipular a conta");
+            Console.WriteLine(" 6 - Editar conta");
             Console.WriteLine(" 0 - Sair do programa");
             Console.WriteLine();
             Console.Write(" Digite a opção desejada: ");
-           
         }
 
         static void insertUser(List<string> cpfs, List<string> titulares, List<string> senhas, List<double> saldos)
@@ -76,13 +75,14 @@ namespace byteBank
             }
         }
 
-        static void listAllCounts(List<string> cpfs, List<string> titulares, List<string> senhas, List<double> saldos)
+        static void listAllCounts(List<string> cpfs, List<string> titulares, List<double> saldos, List<string> senhas)
         {
             for(int i = 0; i < cpfs.Count; i++)
             {
                 Console.WriteLine($"Conta {i + 1}");
                 Console.WriteLine($"Nome do titular do cartão: {titulares[i]}");
                 Console.WriteLine($"CPF do titular do cartão: {cpfs[i]}");
+                Console.WriteLine($"Senha do titular do cartão: {senhas[i]}");
                 Console.WriteLine($"Saldo em conta: {saldos[i]}");
                 Console.WriteLine("--------------------------------------");
             }
@@ -116,7 +116,6 @@ namespace byteBank
                 Console.Clear();
                 Console.WriteLine("Número de CPF não encontrado!\n");
             }
-
         }
 
         static void valueInBank(List<double> saldos) 
@@ -125,6 +124,62 @@ namespace byteBank
             Console.Write("\nPressione enter para voltar ao menu...");
             Console.ReadLine();
             Console.Clear();
+        }
+
+        static void updateAccount(List<string> cpfs, List<string> titulares, List<string> senhas)
+        {
+            Console.Write("Informe o CPF do titular da conta: ");
+            string cpfTitular = Console.ReadLine();
+
+            int cpfIndex = cpfs.IndexOf(cpfTitular);
+
+            Console.WriteLine();
+
+            if(cpfIndex != -1) {
+                int option;
+
+                do {
+                    Console.WriteLine(" 1 - Alterar nome\n 2 - Alterar senha\n 0 - Voltar ao menu principal");
+                    Console.Write("\n Informe uma das opções acima: ");
+
+                    option = int.Parse(Console.ReadLine());
+
+                    switch (option) {
+                        case 1:
+                            updateName(titulares, cpfIndex);
+                            break;
+                        case 2:
+                            updatePassword(senhas, cpfIndex);
+                            break;
+                    }
+                } while(option != 0);
+
+                Console.Clear();
+            }
+            else {
+                Console.Clear();
+                Console.WriteLine("Número de CPF não encontrado!\n");
+            }
+        }
+        static void updateName(List<string> titulares, int cpfIndex)
+        {
+            Console.Clear();
+            Console.Write("Informe o novo nome: ");
+            string newHolder = Console.ReadLine();
+
+            titulares[cpfIndex] = newHolder;
+
+            Console.WriteLine("\nNome Alterado com sucesso!!\n");
+        }
+
+        static void updatePassword(List<string> senhas, int cpfIndex)
+        {
+            Console.Clear();
+            Console.Write("Informe a nova senha: ");
+            string newPassword = Console.ReadLine();
+
+            senhas[cpfIndex] = newPassword;
+            Console.WriteLine("\nSenha Alterada com sucesso!!\n");
         }
 
         static void Main(string[] args)
@@ -154,17 +209,16 @@ namespace byteBank
                         deleteUser(cpfs, titulares, senhas, saldos);
                         break;
                     case 3:
-                        listAllCounts(cpfs, titulares, senhas, saldos);
+                        listAllCounts(cpfs, titulares, saldos, senhas);
                         break;
                     case 4:
                         detailUser(cpfs, titulares, saldos);
                         break;
                     case 5:
                         valueInBank(saldos);
-                        Console.WriteLine("Opção 05");
                         break;
                     case 6:
-                        Console.WriteLine("Opção 06");
+                        updateAccount(cpfs, titulares, senhas);
                         break;
                     default:
                         Console.WriteLine("Opção inválida\n");
