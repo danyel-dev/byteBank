@@ -191,12 +191,22 @@ namespace byteBank
 
             if(valorSaque > saldos[cpfIndex])
             {
-                Console.WriteLine("Saldo insuficiente!");
+                Console.WriteLine("\nSaldo insuficiente!");
             } else
             {
                 saldos[cpfIndex] -= valorSaque;
-                Console.WriteLine("Saque efetuada com sucesso!");
+                Console.WriteLine("\nSaque efetuado com sucesso!");
             }
+        }
+
+        static void depositar(List<double> saldos, int cpfIndex)
+        {
+            Console.Clear();
+            Console.Write("Informe o valor do depósito: ");
+            double valorDeposito = double.Parse(Console.ReadLine());
+
+            saldos[cpfIndex] = valorDeposito;
+            Console.WriteLine("\nDepósito efetuado com sucesso!");
         }
 
         static void manipulateAccount(List<string> cpfs, List<double> saldos)
@@ -229,7 +239,7 @@ namespace byteBank
                             sacar(saldos, cpfIndex);
                             break;
                         case 2:
-                            Console.WriteLine("Depositar");
+                            depositar(saldos, cpfIndex);
                             break;
                         case 3:
                             Console.WriteLine("Transferir");
@@ -237,6 +247,8 @@ namespace byteBank
                     }
 
                 } while (option != 0);
+
+                Console.Clear();
             }
             else
             {
