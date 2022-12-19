@@ -184,6 +184,21 @@ namespace byteBank
             Console.WriteLine("\nSenha Alterada com sucesso!!\n");
         }
 
+        static void sacar(List<double> saldos, int cpfIndex)
+        {
+            Console.Write("Informe o valor a ser sacado: ");
+            double valorSaque = double.Parse(Console.ReadLine());
+
+            if(valorSaque > saldos[cpfIndex])
+            {
+                Console.WriteLine("Saldo insuficiente!");
+            } else
+            {
+                saldos[cpfIndex] -= valorSaque;
+                Console.WriteLine("Saque efetuada com sucesso!");
+            }
+        }
+
         static void manipulateAccount(List<string> cpfs, List<double> saldos)
         {
             Console.Write("Informe o CPF do titular da conta: ");
@@ -210,7 +225,8 @@ namespace byteBank
                     switch (option)
                     {
                         case 1:
-                            Console.WriteLine("Sacar");
+                            Console.Clear();
+                            sacar(saldos, cpfIndex);
                             break;
                         case 2:
                             Console.WriteLine("Depositar");
@@ -219,8 +235,6 @@ namespace byteBank
                             Console.WriteLine("Transferir");
                             break;
                     }
-
-                    Console.Clear();
 
                 } while (option != 0);
             }
