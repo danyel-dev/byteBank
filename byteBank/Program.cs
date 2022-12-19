@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Tracing;
 
 namespace byteBank
 {
@@ -13,6 +14,7 @@ namespace byteBank
             Console.WriteLine(" 4 - Detalhes de um usuário");
             Console.WriteLine(" 5 - Quantia armazenada no banco");
             Console.WriteLine(" 6 - Editar conta");
+            Console.WriteLine(" 7 - Manipular conta");
             Console.WriteLine(" 0 - Sair do programa");
             Console.WriteLine();
             Console.Write(" Digite a opção desejada: ");
@@ -182,6 +184,53 @@ namespace byteBank
             Console.WriteLine("\nSenha Alterada com sucesso!!\n");
         }
 
+        static void manipulateAccount(List<string> cpfs, List<double> saldos)
+        {
+            Console.Write("Informe o CPF do titular da conta: ");
+            string cpfTitular = Console.ReadLine();
+
+            int cpfIndex = cpfs.IndexOf(cpfTitular);
+
+            if (cpfIndex != -1)
+            {
+                int option;
+
+                do
+                {
+                    Console.WriteLine();
+
+                    Console.WriteLine(" 1 - Sacar");
+                    Console.WriteLine(" 2 - Depositar");
+                    Console.WriteLine(" 3 - Transferir");
+                    Console.WriteLine(" 0 - Sair");
+                    Console.Write("\n Informe a opção desejada: ");
+
+                    option = int.Parse(Console.ReadLine());
+
+                    switch (option)
+                    {
+                        case 1:
+                            Console.WriteLine("Sacar");
+                            break;
+                        case 2:
+                            Console.WriteLine("Depositar");
+                            break;
+                        case 3:
+                            Console.WriteLine("Transferir");
+                            break;
+                    }
+
+                    Console.Clear();
+
+                } while (option != 0);
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("\nNúmero de CPF não encontrado!\n");
+            }
+        }
+
         static void Main(string[] args)
         {
             int option;
@@ -219,6 +268,9 @@ namespace byteBank
                         break;
                     case 6:
                         updateAccount(cpfs, titulares, senhas);
+                        break;
+                    case 7:
+                        manipulateAccount(cpfs, saldos);
                         break;
                     default:
                         Console.WriteLine("Opção inválida\n");
