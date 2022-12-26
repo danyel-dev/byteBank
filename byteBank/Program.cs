@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Tracing;
+using System.Security.Cryptography;
 
 namespace byteBank
 {
@@ -318,18 +319,38 @@ namespace byteBank
 
 
 
-        static void login()
+        static int login(List<string> cpfs, List<string> senhas)
         {
-            Console.WriteLine("LOGIN");
+            Console.Write("Informe o seu CPF: ");
+            string cpf_user = Console.ReadLine();
+
+            Console.Write("Agora nos informe sua senha: ");
+            string password_user = Console.ReadLine();
+            
+            if(cpfs.Contains(cpf_user) && senhas.Contains(password_user))
+                return cpfs.IndexOf(cpf_user);
+            
+            return -1;
         }
 
         static void Main(string[] args)
         {
             int optionWelcome;
 
-            while(true)
+            List<string> cpfs = new();
+            List<string> titulares = new();
+            List<string> senhas = new();
+            List<double> saldos = new();
+
+            cpfs.Add("1");
+            titulares.Add("Daniel");
+            senhas.Add("1");
+            saldos.Add(100);
+
+            Console.WriteLine("Olá, Bem vindo ao byteBank\n");
+            
+            while (true)
             {
-                Console.WriteLine("Olá, Bem vindo ao byteBank\n");
                 Console.WriteLine("1 - Logar\n2 - Criar conta\n");
                 Console.Write("Informe um opção: ");
                 
@@ -344,55 +365,61 @@ namespace byteBank
                 if(optionWelcome == 1)
                 {
                     Console.Clear();
-                    login();
-                    break;
+                    int indexLogin = login(cpfs, senhas);
+
+                    Console.WriteLine();
+
+                    if(indexLogin != -1) 
+                    {
+                        Console.Clear();
+                        Console.WriteLine($"Olá {titulares[indexLogin]}, seja bem vindo!\n");
+                        break;
+                    }
+
+                    Console.WriteLine("CPF ou senha incorretos!\n");
                 }
             }
 
-            //int option;
+            int option;
 
-            //List<string> cpfs = new();
-            //List<string> titulares = new();
-            //List<string> senhas = new();
-            //List<double> saldos = new();
+            do
+            {
+                showMenu();
+                option = int.Parse(Console.ReadLine());
 
-            //do {
-            //    showMenu();
-            //    option = int.Parse(Console.ReadLine());
+                Console.Clear();
 
-            //    Console.Clear();
-
-            //    switch(option)
-            //    {
-            //        case 0:
-            //            Console.WriteLine("Obrigado por utilizar este programa, Bye Bye!!");
-            //            break;
-            //        case 1:
-            //            insertUser(cpfs, titulares, senhas, saldos);
-            //            break;
-            //        case 2:
-            //            deleteUser(cpfs, titulares, senhas, saldos);
-            //            break;
-            //        case 3:
-            //            listAllCounts(cpfs, titulares, saldos, senhas);
-            //            break;
-            //        case 4:
-            //            detailUser(cpfs, titulares, saldos);
-            //            break;
-            //        case 5:
-            //            valueInBank(saldos);
-            //            break;
-            //        case 6:
-            //            updateAccount(cpfs, titulares, senhas);
-            //            break;
-            //        case 7:
-            //            manipulateAccount(cpfs, saldos);
-            //            break;
-            //        default:
-            //            Console.WriteLine("Opção inválida\n");
-            //            break;
-            //    }
-            //} while(option != 0);
+                switch (option)
+                {
+                    case 0:
+                        Console.WriteLine("Obrigado por utilizar este programa, Bye Bye!!");
+                        break;
+                    case 1:
+                        insertUser(cpfs, titulares, senhas, saldos);
+                        break;
+                    case 2:
+                        deleteUser(cpfs, titulares, senhas, saldos);
+                        break;
+                    case 3:
+                        listAllCounts(cpfs, titulares, saldos, senhas);
+                        break;
+                    case 4:
+                        detailUser(cpfs, titulares, saldos);
+                        break;
+                    case 5:
+                        valueInBank(saldos);
+                        break;
+                    case 6:
+                        updateAccount(cpfs, titulares, senhas);
+                        break;
+                    case 7:
+                        manipulateAccount(cpfs, saldos);
+                        break;
+                    default:
+                        Console.WriteLine("Opção inválida\n");
+                        break;
+                }
+            } while (option != 0);
         }
     }
 }
