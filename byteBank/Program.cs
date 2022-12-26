@@ -288,52 +288,111 @@ namespace byteBank
             }
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        static void login()
+        {
+            Console.WriteLine("LOGIN");
+        }
+
         static void Main(string[] args)
         {
-            int option;
+            int optionWelcome;
 
-            List<string> cpfs = new();
-            List<string> titulares = new();
-            List<string> senhas = new();
-            List<double> saldos = new();
+            while(true)
+            {
+                Console.WriteLine("Olá, Bem vindo ao byteBank\n");
+                Console.WriteLine("1 - Logar\n2 - Criar conta\n");
+                Console.Write("Informe um opção: ");
+                
+                optionWelcome = int.Parse(Console.ReadLine());
 
-            do {
-                showMenu();
-                option = int.Parse(Console.ReadLine());
-
-                Console.Clear();
-
-                switch(option)
+                if (optionWelcome != 1 && optionWelcome != 2)
                 {
-                    case 0:
-                        Console.WriteLine("Obrigado por utilizar este programa, Bye Bye!!");
-                        break;
-                    case 1:
-                        insertUser(cpfs, titulares, senhas, saldos);
-                        break;
-                    case 2:
-                        deleteUser(cpfs, titulares, senhas, saldos);
-                        break;
-                    case 3:
-                        listAllCounts(cpfs, titulares, saldos, senhas);
-                        break;
-                    case 4:
-                        detailUser(cpfs, titulares, saldos);
-                        break;
-                    case 5:
-                        valueInBank(saldos);
-                        break;
-                    case 6:
-                        updateAccount(cpfs, titulares, senhas);
-                        break;
-                    case 7:
-                        manipulateAccount(cpfs, saldos);
-                        break;
-                    default:
-                        Console.WriteLine("Opção inválida\n");
-                        break;
+                    Console.Clear();
+                    Console.WriteLine("Opção não encontrada, por favor digite uma opção válida!\n");
                 }
-            } while(option != 0);
+
+                if(optionWelcome == 1)
+                {
+                    Console.Clear();
+                    login();
+                    break;
+                }
+            }
+
+            //int option;
+
+            //List<string> cpfs = new();
+            //List<string> titulares = new();
+            //List<string> senhas = new();
+            //List<double> saldos = new();
+
+            //do {
+            //    showMenu();
+            //    option = int.Parse(Console.ReadLine());
+
+            //    Console.Clear();
+
+            //    switch(option)
+            //    {
+            //        case 0:
+            //            Console.WriteLine("Obrigado por utilizar este programa, Bye Bye!!");
+            //            break;
+            //        case 1:
+            //            insertUser(cpfs, titulares, senhas, saldos);
+            //            break;
+            //        case 2:
+            //            deleteUser(cpfs, titulares, senhas, saldos);
+            //            break;
+            //        case 3:
+            //            listAllCounts(cpfs, titulares, saldos, senhas);
+            //            break;
+            //        case 4:
+            //            detailUser(cpfs, titulares, saldos);
+            //            break;
+            //        case 5:
+            //            valueInBank(saldos);
+            //            break;
+            //        case 6:
+            //            updateAccount(cpfs, titulares, senhas);
+            //            break;
+            //        case 7:
+            //            manipulateAccount(cpfs, saldos);
+            //            break;
+            //        default:
+            //            Console.WriteLine("Opção inválida\n");
+            //            break;
+            //    }
+            //} while(option != 0);
         }
     }
 }
