@@ -250,8 +250,10 @@ namespace byteBank
             Console.WriteLine("-------------------------------");
             Console.WriteLine(" 1 - Detalhes da conta");
             Console.WriteLine(" 2 - Ver Saldo");
-            Console.WriteLine(" 3 - Editar conta");
-            Console.WriteLine(" 4 - Manipular conta");
+            Console.WriteLine(" 3 - Sacar");
+            Console.WriteLine(" 4 - Depositar");
+            Console.WriteLine(" 5 - Transferir");
+            Console.WriteLine(" 6 - Manipular conta");
             Console.WriteLine(" 0 - Logout");
             Console.WriteLine();
             Console.Write(" Digite a opção desejada: ");
@@ -313,6 +315,11 @@ namespace byteBank
                 Console.ReadLine();
                 Console.Clear();
 
+        }
+
+        static void showBalance(List<double> saldos, int indexCPFLogado)
+        {
+            Console.WriteLine(saldos[indexCPFLogado]);
         }
 
         static void Main(string[] args)
@@ -384,7 +391,7 @@ namespace byteBank
                         detailUser(cpfs, titulares, saldos, indexCpfLogado);
                         break;
                     case 2:
-                        deleteUser(cpfs, titulares, senhas, saldos);
+                        showBalance(saldos, indexCpfLogado);
                         break;
                     case 3:
                         listAllCounts(cpfs, titulares, saldos, senhas);
