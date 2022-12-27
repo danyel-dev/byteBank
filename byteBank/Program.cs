@@ -6,51 +6,6 @@ namespace byteBank
 {
     class Program
     {
-        static void showMenu()
-        {
-            Console.WriteLine("-------------------------------");
-            Console.WriteLine(" 1 - Inserir um novo usuário");
-            Console.WriteLine(" 2 - Deletar um usuário");
-            Console.WriteLine(" 3 - Listar todas as contas registradas");
-            Console.WriteLine(" 4 - Detalhes de um usuário");
-            Console.WriteLine(" 5 - Quantia armazenada no banco");
-            Console.WriteLine(" 6 - Editar conta");
-            Console.WriteLine(" 7 - Manipular conta");
-            Console.WriteLine(" 0 - Sair do programa");
-            Console.WriteLine();
-            Console.Write(" Digite a opção desejada: ");
-        }
-
-        static int createAccount(List<string> cpfs, List<string> titulares, List<string> senhas, List<double> saldos)
-        {
-            Console.Write("Informe o seu CPF: ");
-            string cpf = Console.ReadLine();
-
-            if (!cpfs.Contains(cpf))
-            {
-                cpfs.Add(cpf);
-                Console.WriteLine();
-
-                Console.Write("Agora, nós informe o nome do titular: ");
-                titulares.Add(Console.ReadLine());
-
-                Console.WriteLine();
-
-                Console.Write("Para terminar, cadastre uma senha forte: ");
-                senhas.Add(Console.ReadLine());
-
-                saldos.Add(0);
-
-                Console.Clear();
-                Console.WriteLine("\nUsuário cadastrado com sucesso!!\n");
-                return cpfs.IndexOf(cpf);
-            }
-
-            Console.Clear();
-            Console.WriteLine("\nEste CPF já está registrado!!\n");
-            return -1;
-        }
-
         static void deleteUser(List<string> cpfs, List<string> titulares, List<string> senhas, List<double> saldos)
         {
             Console.WriteLine();
@@ -92,32 +47,6 @@ namespace byteBank
             Console.Write("\nPressione enter para voltar ao menu...");
             Console.ReadLine();
             Console.Clear();
-        }
-
-        static void detailUser(List<string> cpfs, List<string> titulares, List<double> saldos) 
-        {
-            Console.Write("Informe o cpf do usuário: ");
-            string cpf = Console.ReadLine();
-
-            if (cpfs.Contains(cpf))
-            {
-                var index = cpfs.FindIndex(item_cpf => item_cpf == cpf);
-
-                Console.WriteLine();
-                Console.WriteLine("--------------------------------");
-                Console.WriteLine($"Nome do titular do cartão: {titulares[index]}");
-                Console.WriteLine($"CPF do titular do cartão: {cpfs[index]}");
-                Console.WriteLine($"Saldo em conta: {saldos[index]}");
-
-                Console.Write("\nPressione enter para voltar ao menu...");
-                Console.ReadLine();
-                Console.Clear();
-            } 
-            else
-            {
-                Console.Clear();
-                Console.WriteLine("Número de CPF não encontrado!\n");
-            }
         }
 
         static void valueInBank(List<double> saldos) 
@@ -316,7 +245,17 @@ namespace byteBank
 
 
 
-
+        static void showMenu()
+        {
+            Console.WriteLine("-------------------------------");
+            Console.WriteLine(" 1 - Detalhes da conta");
+            Console.WriteLine(" 2 - Ver Saldo");
+            Console.WriteLine(" 3 - Editar conta");
+            Console.WriteLine(" 4 - Manipular conta");
+            Console.WriteLine(" 0 - Logout");
+            Console.WriteLine();
+            Console.Write(" Digite a opção desejada: ");
+        }
 
         static int login(List<string> cpfs, List<string> senhas)
         {
@@ -332,11 +271,55 @@ namespace byteBank
             return -1;
         }
 
+        static int createAccount(List<string> cpfs, List<string> titulares, List<string> senhas, List<double> saldos)
+        {
+            Console.Write("Informe o seu CPF: ");
+            string cpf = Console.ReadLine();
+
+            if (!cpfs.Contains(cpf))
+            {
+                cpfs.Add(cpf);
+                Console.WriteLine();
+
+                Console.Write("Agora, nós informe o nome do titular: ");
+                titulares.Add(Console.ReadLine());
+
+                Console.WriteLine();
+
+                Console.Write("Para terminar, cadastre uma senha forte: ");
+                senhas.Add(Console.ReadLine());
+
+                saldos.Add(0);
+
+                Console.Clear();
+                Console.WriteLine("\nUsuário cadastrado com sucesso!!\n");
+                return cpfs.IndexOf(cpf);
+            }
+
+            Console.Clear();
+            Console.WriteLine("\nEste CPF já está registrado!!\n");
+            return -1;
+        }
+
+        static void detailUser(List<string> cpfs, List<string> titulares, List<double> saldos, int indexCPFLogado)
+        {
+                Console.WriteLine();
+                Console.WriteLine("--------------------------------");
+                Console.WriteLine($"Nome do titular do cartão: {titulares[indexCPFLogado]}");
+                Console.WriteLine($"CPF do titular do cartão: {cpfs[indexCPFLogado]}");
+                Console.WriteLine($"Saldo em conta: {saldos[indexCPFLogado]}");
+
+                Console.Write("\nPressione enter para voltar ao menu...");
+                Console.ReadLine();
+                Console.Clear();
+
+        }
+
         static void Main(string[] args)
         {
             int optionWelcome;
 
-            string cpf_logado;
+            int indexCpfLogado;
 
             List<string> cpfs = new();
             List<string> titulares = new();
@@ -361,15 +344,14 @@ namespace byteBank
                 if(optionWelcome == 1)
                 {
                     Console.Clear();
-                    int indexLogin = login(cpfs, senhas);
+                    indexCpfLogado = login(cpfs, senhas);
 
                     Console.WriteLine();
 
-                    if(indexLogin != -1) 
+                    if(indexCpfLogado != -1) 
                     {
                         Console.Clear();
-                        Console.WriteLine($"Olá {titulares[indexLogin]}, seja bem vindo!\n");
-                        cpf_logado = cpfs[indexLogin];
+                        Console.WriteLine($"Olá {titulares[indexCpfLogado]}, seja bem vindo!\n");
                         break;
                     }
 
@@ -379,8 +361,7 @@ namespace byteBank
                 if(optionWelcome == 2)
                 {
                     Console.Clear();
-                    int indexCreateAccount = createAccount(cpfs, titulares, senhas, saldos);
-                    cpf_logado = cpfs[indexCreateAccount];
+                    indexCpfLogado = createAccount(cpfs, titulares, senhas, saldos);
                     break;
                 }
             }
@@ -397,10 +378,10 @@ namespace byteBank
                 switch (option)
                 {
                     case 0:
-                        Console.WriteLine("Obrigado por utilizar este programa, Bye Bye!!");
+                        Console.WriteLine("Saindo da conta, Bye Bye!!");
                         break;
                     case 1:
-                        createAccount(cpfs, titulares, senhas, saldos);
+                        detailUser(cpfs, titulares, saldos, indexCpfLogado);
                         break;
                     case 2:
                         deleteUser(cpfs, titulares, senhas, saldos);
@@ -409,7 +390,6 @@ namespace byteBank
                         listAllCounts(cpfs, titulares, saldos, senhas);
                         break;
                     case 4:
-                        detailUser(cpfs, titulares, saldos);
                         break;
                     case 5:
                         valueInBank(saldos);
