@@ -113,109 +113,6 @@ namespace byteBank
             Console.WriteLine("\nSenha Alterada com sucesso!!\n");
         }
 
-        static bool sacar(List<double> saldos, int cpfIndex, double valorSaque)
-        {
-            if (valorSaque < saldos[cpfIndex]) {
-                saldos[cpfIndex] -= valorSaque;
-                return true;
-            }
-            
-            return false;
-        }
-
-        static bool depositar(List<double> saldos, int cpfIndex, double valorDeposito)
-        {
-            saldos[cpfIndex] += valorDeposito;
-            return true;
-        }
-
-        static void transferencia(List<double> saldos, List<string> cpfs, int indexCpfOrigem)
-        {
-            Console.Write("Informe o valor da transferência: ");
-            double valorTransferencia = double.Parse(Console.ReadLine());
-
-            Console.Write("Agora informe o CPF de destino: ");
-            string cpfDestino = Console.ReadLine();
-
-            int indexCpfDestino = cpfs.IndexOf(cpfDestino);
-
-            if (indexCpfDestino != -1)
-            {
-                if (sacar(saldos, indexCpfOrigem, valorTransferencia)) {
-                    depositar(saldos, indexCpfDestino, valorTransferencia);
-                    Console.WriteLine("\nTransferência efetuada com sucesso!");
-                }
-                else 
-                    Console.WriteLine("\nSaldo insuficiente para transferir!");
-            } 
-            else
-            {
-                Console.WriteLine("\nCPF de destino não encontrado!!");
-            }
-        }
-
-        static void manipulateAccount(List<string> cpfs, List<double> saldos)
-        {
-            Console.Write("Informe o CPF do titular da conta: ");
-            string cpfTitular = Console.ReadLine();
-
-            int cpfIndex = cpfs.IndexOf(cpfTitular);
-
-            if (cpfIndex != -1)
-            {
-                int option;
-
-                do
-                {
-                    Console.WriteLine();
-
-                    Console.WriteLine(" 1 - Sacar");
-                    Console.WriteLine(" 2 - Depositar");
-                    Console.WriteLine(" 3 - Transferir");
-                    Console.WriteLine(" 0 - Sair");
-                    Console.Write("\n Informe a opção desejada: ");
-
-                    option = int.Parse(Console.ReadLine());
-
-                    switch (option)
-                    {
-                        case 1:
-                            Console.Clear();
-
-                            Console.Write("Informe o valor a ser sacado: ");
-                            double valorSaque = double.Parse(Console.ReadLine());
-                            
-                            if(sacar(saldos, cpfIndex, valorSaque))
-                                Console.WriteLine("\nSaque efetuado com sucesso!");
-                            else
-                                Console.WriteLine("\nSaldo insuficiente!");
-                            
-                            break;
-                        case 2:
-                            Console.Clear();
-                            Console.Write("Informe o valor do depósito: ");
-                            double valorDeposito = double.Parse(Console.ReadLine());
-
-                            depositar(saldos, cpfIndex, valorDeposito);
-                            Console.WriteLine("\nDepósito efetuado com sucesso!");
-
-                            break;
-                        case 3:
-                            Console.Clear();
-                            transferencia(saldos, cpfs, cpfIndex);
-                            break;
-                    }
-
-                } while (option != 0);
-
-                Console.Clear();
-            }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine("\nNúmero de CPF não encontrado!\n");
-            }
-        }
 
 
 
@@ -233,27 +130,16 @@ namespace byteBank
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+   
 
         static void showMenu()
         {
-            Console.WriteLine("-------------------------------");
+            Console.WriteLine(" -------------------------------");
             Console.WriteLine(" 1 - Detalhes da conta");
             Console.WriteLine(" 2 - Ver Saldo");
-            Console.WriteLine(" 3 - Sacar");
-            Console.WriteLine(" 4 - Depositar");
-            Console.WriteLine(" 5 - Transferir");
-            Console.WriteLine(" 6 - Manipular conta");
+            Console.WriteLine(" 3 - Operações no saldo");
+            Console.WriteLine(" 4 - Manipular conta");
+            Console.WriteLine(" 5 - Histórico");
             Console.WriteLine(" 0 - Logout");
             Console.WriteLine();
             Console.Write(" Digite a opção desejada: ");
@@ -319,7 +205,100 @@ namespace byteBank
 
         static void showBalance(List<double> saldos, int indexCPFLogado)
         {
-            Console.WriteLine(saldos[indexCPFLogado]);
+            Console.WriteLine($"Saldo: {saldos[indexCPFLogado]}");
+        }
+
+        static void manipulateAccount(List<string> cpfs, List<double> saldos, int indexCpfLogado)
+        {
+            int option;
+
+            do
+            {
+                Console.WriteLine();
+
+                Console.WriteLine(" 1 - Sacar");
+                Console.WriteLine(" 2 - Depositar");
+                Console.WriteLine(" 3 - Transferir");
+                Console.WriteLine(" 0 - Sair");
+                Console.Write("\n Informe a opção desejada: ");
+
+                option = int.Parse(Console.ReadLine());
+
+                switch (option)
+                {
+                    case 1:
+                        Console.Clear();
+
+                        Console.Write("Informe o valor a ser sacado: ");
+                        double valorSaque = double.Parse(Console.ReadLine());
+
+                        if (sacar(saldos, indexCpfLogado, valorSaque))
+                            Console.WriteLine("\nSaque efetuado com sucesso!");
+                        else
+                            Console.WriteLine("\nSaldo insuficiente!");
+
+                        break;
+                    case 2:
+                        Console.Clear();
+                        Console.Write("Informe o valor do depósito: ");
+                        double valorDeposito = double.Parse(Console.ReadLine());
+
+                        depositar(saldos, indexCpfLogado, valorDeposito);
+                        Console.WriteLine("\nDepósito efetuado com sucesso!");
+
+                        break;
+                    case 3:
+                        Console.Clear();
+                        transferencia(saldos, cpfs, indexCpfLogado);
+                        break;
+                }
+
+            } while (option != 0);
+
+            Console.Clear();
+        }
+
+        static bool sacar(List<double> saldos, int cpfIndex, double valorSaque)
+        {
+            if (valorSaque < saldos[cpfIndex])
+            {
+                saldos[cpfIndex] -= valorSaque;
+                return true;
+            }
+
+            return false;
+        }
+
+        static bool depositar(List<double> saldos, int cpfIndex, double valorDeposito)
+        {
+            saldos[cpfIndex] += valorDeposito;
+            return true;
+        }
+
+        static void transferencia(List<double> saldos, List<string> cpfs, int indexCpfOrigem)
+        {
+            Console.Write("Informe o valor da transferência: ");
+            double valorTransferencia = double.Parse(Console.ReadLine());
+
+            Console.Write("Agora informe o CPF de destino: ");
+            string cpfDestino = Console.ReadLine();
+
+            int indexCpfDestino = cpfs.IndexOf(cpfDestino);
+
+            if (indexCpfDestino != -1)
+            {
+                if (sacar(saldos, indexCpfOrigem, valorTransferencia))
+                {
+                    depositar(saldos, indexCpfDestino, valorTransferencia);
+                    Console.WriteLine("\nTransferência efetuada com sucesso!");
+                }
+                else
+                    Console.WriteLine("\nSaldo insuficiente para transferir!");
+            }
+            else
+            {
+                Console.WriteLine("\nCPF de destino não encontrado!!");
+            }
         }
 
         static void Main(string[] args)
@@ -332,6 +311,11 @@ namespace byteBank
             List<string> titulares = new();
             List<string> senhas = new();
             List<double> saldos = new();
+
+            cpfs.Add("1");
+            titulares.Add("daniel");
+            senhas.Add("123");
+            saldos.Add(0);
 
             Console.WriteLine("Olá, Bem vindo ao byteBank\n");
             
@@ -394,7 +378,7 @@ namespace byteBank
                         showBalance(saldos, indexCpfLogado);
                         break;
                     case 3:
-                        listAllCounts(cpfs, titulares, saldos, senhas);
+                        manipulateAccount(cpfs, saldos, indexCpfLogado);
                         break;
                     case 4:
                         break;
@@ -403,9 +387,6 @@ namespace byteBank
                         break;
                     case 6:
                         updateAccount(cpfs, titulares, senhas);
-                        break;
-                    case 7:
-                        manipulateAccount(cpfs, saldos);
                         break;
                     default:
                         Console.WriteLine("Opção inválida\n");
