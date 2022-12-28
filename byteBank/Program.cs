@@ -32,65 +32,31 @@ namespace byteBank
             }
         }
 
-        static void listAllCounts(List<string> cpfs, List<string> titulares, List<double> saldos, List<string> senhas)
+        static void updateAccount(List<string> cpfs, List<string> titulares, List<string> senhas, int indexCpfLogado)
         {
-            for(int i = 0; i < cpfs.Count; i++)
-            {
-                Console.WriteLine($"Conta {i + 1}");
-                Console.WriteLine($"Nome do titular do cartão: {titulares[i]}");
-                Console.WriteLine($"CPF do titular do cartão: {cpfs[i]}");
-                Console.WriteLine($"Senha do titular do cartão: {senhas[i]}");
-                Console.WriteLine($"Saldo em conta: {saldos[i]}");
-                Console.WriteLine("--------------------------------------");
-            }
+            int option;
 
-            Console.Write("\nPressione enter para voltar ao menu...");
-            Console.ReadLine();
+            do {
+                Console.WriteLine(" 1 - Alterar nome\n 2 - Alterar senha\n 0 - Voltar ao menu principal");
+                Console.Write("\n Informe uma das opções acima: ");
+
+                option = int.Parse(Console.ReadLine());
+
+                switch (option) {
+                    case 1:
+                        updateName(titulares, indexCpfLogado);
+                        break;
+                    case 2:
+                        updatePassword(senhas, indexCpfLogado);
+                        break;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Opção incorreta!!\n");
+                        break;
+                }
+            } while(option != 0);
+
             Console.Clear();
-        }
-
-        static void valueInBank(List<double> saldos) 
-        {
-            Console.WriteLine($"Quantia total armazenada no banco: {saldos.Sum(saldo => saldo)}");
-            Console.Write("\nPressione enter para voltar ao menu...");
-            Console.ReadLine();
-            Console.Clear();
-        }
-
-        static void updateAccount(List<string> cpfs, List<string> titulares, List<string> senhas)
-        {
-            Console.Write("Informe o CPF do titular da conta: ");
-            string cpfTitular = Console.ReadLine();
-
-            int cpfIndex = cpfs.IndexOf(cpfTitular);
-
-            Console.WriteLine();
-
-            if(cpfIndex != -1) {
-                int option;
-
-                do {
-                    Console.WriteLine(" 1 - Alterar nome\n 2 - Alterar senha\n 0 - Voltar ao menu principal");
-                    Console.Write("\n Informe uma das opções acima: ");
-
-                    option = int.Parse(Console.ReadLine());
-
-                    switch (option) {
-                        case 1:
-                            updateName(titulares, cpfIndex);
-                            break;
-                        case 2:
-                            updatePassword(senhas, cpfIndex);
-                            break;
-                    }
-                } while(option != 0);
-
-                Console.Clear();
-            }
-            else {
-                Console.Clear();
-                Console.WriteLine("Número de CPF não encontrado!\n");
-            }
         }
         static void updateName(List<string> titulares, int cpfIndex)
         {
@@ -303,96 +269,95 @@ namespace byteBank
 
         static void Main(string[] args)
         {
-            int optionWelcome;
-
-            int indexCpfLogado;
-
             List<string> cpfs = new();
             List<string> titulares = new();
             List<string> senhas = new();
             List<double> saldos = new();
 
-            cpfs.Add("1");
-            titulares.Add("daniel");
-            senhas.Add("123");
-            saldos.Add(0);
-
-            Console.WriteLine("Olá, Bem vindo ao byteBank\n");
-            
             while (true)
             {
-                Console.WriteLine("1 - Logar\n2 - Criar conta\n");
-                Console.Write("Informe um opção: ");
-                
-                optionWelcome = int.Parse(Console.ReadLine());
+                int optionWelcome;
 
-                if (optionWelcome != 1 && optionWelcome != 2)
+                int indexCpfLogado;
+
+                Console.WriteLine("Olá, Bem vindo ao byteBank\n");
+
+                while (true)
                 {
-                    Console.Clear();
-                    Console.WriteLine("Opção não encontrada, por favor digite uma opção válida!\n");
-                }
+                    Console.WriteLine("1 - Logar\n2 - Criar conta\n");
+                    Console.Write("Informe um opção: ");
 
-                if(optionWelcome == 1)
-                {
-                    Console.Clear();
-                    indexCpfLogado = login(cpfs, senhas);
+                    optionWelcome = int.Parse(Console.ReadLine());
 
-                    Console.WriteLine();
-
-                    if(indexCpfLogado != -1) 
+                    if (optionWelcome != 1 && optionWelcome != 2)
                     {
                         Console.Clear();
-                        Console.WriteLine($"Olá {titulares[indexCpfLogado]}, seja bem vindo!\n");
-                        break;
+                        Console.WriteLine("Opção não encontrada, por favor digite uma opção válida!\n");
                     }
 
-                    Console.WriteLine("CPF ou senha incorretos!\n");
+                    if (optionWelcome == 1)
+                    {
+                        Console.Clear();
+                        indexCpfLogado = login(cpfs, senhas);
+
+                        Console.WriteLine();
+
+                        if (indexCpfLogado != -1)
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"Olá {titulares[indexCpfLogado]}, seja bem vindo!\n");
+                            break;
+                        }
+
+                        Console.WriteLine("CPF ou senha incorretos!\n");
+                    }
+
+                    if (optionWelcome == 2)
+                    {
+                        Console.Clear();
+                        indexCpfLogado = createAccount(cpfs, titulares, senhas, saldos);
+                        break;
+                    }
                 }
 
-                if(optionWelcome == 2)
+                int option;
+
+                do
                 {
+                    showMenu();
+                    option = int.Parse(Console.ReadLine());
+
                     Console.Clear();
-                    indexCpfLogado = createAccount(cpfs, titulares, senhas, saldos);
-                    break;
-                }
+
+                    switch (option)
+                    {
+                        case 0:
+                            Console.WriteLine("Saindo da conta, Bye Bye!!");
+                            break;
+                        case 1:
+                            detailUser(cpfs, titulares, saldos, indexCpfLogado);
+                            break;
+                        case 2:
+                            showBalance(saldos, indexCpfLogado);
+                            break;
+                        case 3:
+                            manipulateAccount(cpfs, saldos, indexCpfLogado);
+                            break;
+                        case 4:
+                            updateAccount(cpfs, titulares, senhas, indexCpfLogado);
+                            break;
+                        case 5:
+                            //valueInBank(saldos);
+                            break;
+                        case 6:
+                            //updateAccount(cpfs, titulares, senhas);
+                            break;
+                        default:
+                            Console.WriteLine("Opção inválida\n");
+                            break;
+                    }
+                } while (option != 0);
             }
-
-            int option;
-
-            do
-            {
-                showMenu();
-                option = int.Parse(Console.ReadLine());
-
-                Console.Clear();
-
-                switch (option)
-                {
-                    case 0:
-                        Console.WriteLine("Saindo da conta, Bye Bye!!");
-                        break;
-                    case 1:
-                        detailUser(cpfs, titulares, saldos, indexCpfLogado);
-                        break;
-                    case 2:
-                        showBalance(saldos, indexCpfLogado);
-                        break;
-                    case 3:
-                        manipulateAccount(cpfs, saldos, indexCpfLogado);
-                        break;
-                    case 4:
-                        break;
-                    case 5:
-                        valueInBank(saldos);
-                        break;
-                    case 6:
-                        updateAccount(cpfs, titulares, senhas);
-                        break;
-                    default:
-                        Console.WriteLine("Opção inválida\n");
-                        break;
-                }
-            } while (option != 0);
         }
     }
 }
