@@ -2,102 +2,11 @@
 using System.Diagnostics.Tracing;
 using System.Security.Cryptography;
 
+
 namespace byteBank
 {
     class Program
     {
-        static void deleteUser(List<string> cpfs, List<string> titulares, List<string> senhas, List<double> saldos)
-        {
-            Console.WriteLine();
-
-            Console.Write("Informe o CPF para deletar: ");
-            string cpf = Console.ReadLine();
-
-            if (!cpfs.Contains(cpf))
-            {
-                Console.Clear();
-                Console.WriteLine("Esse CPF não está cadastrado!!\n");
-            }
-            else
-            {
-                var index = cpfs.FindIndex(item_cpf => item_cpf == cpf);
-
-                cpfs.RemoveAt(index);
-                titulares.RemoveAt(index);
-                senhas.RemoveAt(index);
-                saldos.RemoveAt(index);
-
-                Console.Clear();
-                Console.WriteLine("Conta deletada com sucesso!!\n");
-            }
-        }
-
-        static void updateAccount(List<string> cpfs, List<string> titulares, List<string> senhas, int indexCpfLogado)
-        {
-            int option;
-
-            do {
-                Console.WriteLine(" 1 - Alterar nome\n 2 - Alterar senha\n 0 - Voltar ao menu principal");
-                Console.Write("\n Informe uma das opções acima: ");
-
-                option = int.Parse(Console.ReadLine());
-
-                switch (option) {
-                    case 1:
-                        updateName(titulares, indexCpfLogado);
-                        break;
-                    case 2:
-                        updatePassword(senhas, indexCpfLogado);
-                        break;
-                    default:
-                        Console.Clear();
-                        Console.WriteLine("Opção incorreta!!\n");
-                        break;
-                }
-            } while(option != 0);
-
-            Console.Clear();
-        }
-        static void updateName(List<string> titulares, int cpfIndex)
-        {
-            Console.Clear();
-            Console.Write("Informe o novo nome: ");
-            string newHolder = Console.ReadLine();
-
-            titulares[cpfIndex] = newHolder;
-
-            Console.WriteLine("\nNome Alterado com sucesso!!\n");
-        }
-
-        static void updatePassword(List<string> senhas, int cpfIndex)
-        {
-            Console.Clear();
-            Console.Write("Informe a nova senha: ");
-            string newPassword = Console.ReadLine();
-
-            senhas[cpfIndex] = newPassword;
-            Console.WriteLine("\nSenha Alterada com sucesso!!\n");
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
         static void showMenu()
         {
             Console.WriteLine(" -------------------------------");
@@ -105,7 +14,8 @@ namespace byteBank
             Console.WriteLine(" 2 - Ver Saldo");
             Console.WriteLine(" 3 - Operações no saldo");
             Console.WriteLine(" 4 - Manipular conta");
-            Console.WriteLine(" 5 - Histórico");
+            Console.WriteLine(" 5 - Deletar conta");
+            Console.WriteLine(" 6 - Histórico");
             Console.WriteLine(" 0 - Logout");
             Console.WriteLine();
             Console.Write(" Digite a opção desejada: ");
@@ -157,16 +67,15 @@ namespace byteBank
 
         static void detailUser(List<string> cpfs, List<string> titulares, List<double> saldos, int indexCPFLogado)
         {
-                Console.WriteLine();
-                Console.WriteLine("--------------------------------");
-                Console.WriteLine($"Nome do titular do cartão: {titulares[indexCPFLogado]}");
-                Console.WriteLine($"CPF do titular do cartão: {cpfs[indexCPFLogado]}");
-                Console.WriteLine($"Saldo em conta: {saldos[indexCPFLogado]}");
+            Console.WriteLine();
+            Console.WriteLine("--------------------------------");
+            Console.WriteLine($"Nome do titular do cartão: {titulares[indexCPFLogado]}");
+            Console.WriteLine($"CPF do titular do cartão: {cpfs[indexCPFLogado]}");
+            Console.WriteLine($"Saldo em conta: {saldos[indexCPFLogado]}");
 
-                Console.Write("\nPressione enter para voltar ao menu...");
-                Console.ReadLine();
-                Console.Clear();
-
+            Console.Write("\nPressione enter para voltar ao menu...");
+            Console.ReadLine();
+            Console.Clear();
         }
 
         static void showBalance(List<double> saldos, int indexCPFLogado)
@@ -267,6 +176,65 @@ namespace byteBank
             }
         }
 
+        static void updateAccount(List<string> cpfs, List<string> titulares, List<string> senhas, int indexCpfLogado)
+        {
+            int option;
+
+            do {
+                Console.WriteLine(" 1 - Alterar nome\n 2 - Alterar senha\n 0 - Voltar ao menu principal");
+                Console.Write("\n Informe uma das opções acima: ");
+
+                option = int.Parse(Console.ReadLine());
+
+                switch (option) {
+                    case 1:
+                        updateName(titulares, indexCpfLogado);
+                        break;
+                    case 2:
+                        updatePassword(senhas, indexCpfLogado);
+                        break;
+                    default:
+                        Console.Clear();
+                        Console.WriteLine("Opção incorreta!!\n");
+                        break;
+                }
+            } while(option != 0);
+
+            Console.Clear();
+        }
+
+        static void updateName(List<string> titulares, int cpfIndex)
+        {
+            Console.Clear();
+            Console.Write("Informe o novo nome: ");
+            string newHolder = Console.ReadLine();
+
+            titulares[cpfIndex] = newHolder;
+
+            Console.WriteLine("\nNome Alterado com sucesso!!\n");
+        }
+
+        static void updatePassword(List<string> senhas, int cpfIndex)
+        {
+            Console.Clear();
+            Console.Write("Informe a nova senha: ");
+            string newPassword = Console.ReadLine();
+
+            senhas[cpfIndex] = newPassword;
+            Console.WriteLine("\nSenha Alterada com sucesso!!\n");
+        }
+
+        static void deleteUser(List<string> cpfs, List<string> titulares, List<string> senhas, List<double> saldos, int indexCpfLogado)
+        {
+            cpfs.RemoveAt(indexCpfLogado);
+            titulares.RemoveAt(indexCpfLogado);
+            senhas.RemoveAt(indexCpfLogado);
+            saldos.RemoveAt(indexCpfLogado);
+
+            Console.Clear();
+            Console.WriteLine("Conta deletada com sucesso!!\n");
+        }
+
         static void Main(string[] args)
         {
             List<string> cpfs = new();
@@ -347,7 +315,8 @@ namespace byteBank
                             updateAccount(cpfs, titulares, senhas, indexCpfLogado);
                             break;
                         case 5:
-                            //valueInBank(saldos);
+                            deleteUser(cpfs, titulares, senhas, saldos, indexCpfLogado);
+                            option = 0;
                             break;
                         case 6:
                             //updateAccount(cpfs, titulares, senhas);
