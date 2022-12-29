@@ -35,7 +35,7 @@ namespace byteBank
             return -1;
         }
 
-        static int createAccount(List<string> cpfs, List<string> titulares, List<string> senhas, List<double> saldos)
+        static int createAccount(List<string> cpfs, List<string> titulares, List<string> senhas, List<double> saldos, List<string> historico)
         {
             Console.Write("Informe o seu CPF: ");
             string cpf = Console.ReadLine();
@@ -53,6 +53,7 @@ namespace byteBank
                 Console.Write("Para terminar, cadastre uma senha forte: ");
                 senhas.Add(Console.ReadLine());
 
+                historico.Add("");
                 saldos.Add(0);
 
                 Console.Clear();
@@ -83,7 +84,7 @@ namespace byteBank
             Console.WriteLine($"Saldo: {saldos[indexCPFLogado]}");
         }
 
-        static void manipulateAccount(List<string> cpfs, List<double> saldos, int indexCpfLogado)
+        static void manipulateAccount(List<string> cpfs, List<double> saldos, int indexCpfLogado, List<string> historico)
         {
             int option;
 
@@ -107,7 +108,7 @@ namespace byteBank
                         Console.Write("Informe o valor a ser sacado: ");
                         double valorSaque = double.Parse(Console.ReadLine());
 
-                        if (sacar(saldos, indexCpfLogado, valorSaque))
+                        if (sacar(saldos, indexCpfLogado, valorSaque, historico))
                             Console.WriteLine("\nSaque efetuado com sucesso!");
                         else
                             Console.WriteLine("\nSaldo insuficiente!");
@@ -118,13 +119,13 @@ namespace byteBank
                         Console.Write("Informe o valor do depósito: ");
                         double valorDeposito = double.Parse(Console.ReadLine());
 
-                        depositar(saldos, indexCpfLogado, valorDeposito);
+                        depositar(saldos, indexCpfLogado, valorDeposito, historico);
                         Console.WriteLine("\nDepósito efetuado com sucesso!");
 
                         break;
                     case 3:
                         Console.Clear();
-                        transferencia(saldos, cpfs, indexCpfLogado);
+                        transferencia(saldos, cpfs, indexCpfLogado, historico);
                         break;
                 }
 
@@ -133,24 +134,27 @@ namespace byteBank
             Console.Clear();
         }
 
-        static bool sacar(List<double> saldos, int cpfIndex, double valorSaque)
+        static bool sacar(List<double> saldos, int cpfIndex, double valorSaque, List<string> historico)
         {
-            if (valorSaque < saldos[cpfIndex])
+            if (valorSaque <= saldos[cpfIndex])
             {
                 saldos[cpfIndex] -= valorSaque;
+                cadastrarTransacao($"Saque no valor de R$ {valorSaque:N2} efetuado com sucesso\n", historico, cpfIndex);
                 return true;
             }
+            cadastrarTransacao($"Saque no valor de R$ {valorSaque:N2} cancelado por falta de limite\n", historico, cpfIndex);
 
             return false;
         }
 
-        static bool depositar(List<double> saldos, int cpfIndex, double valorDeposito)
+        static bool depositar(List<double> saldos, int cpfIndex, double valorDeposito, List<string> historico)
         {
             saldos[cpfIndex] += valorDeposito;
+            cadastrarTransacao($"Depósito no valor de R$ {valorDeposito:N2} efetuado com sucesso!\n", historico, cpfIndex);
             return true;
         }
 
-        static void transferencia(List<double> saldos, List<string> cpfs, int indexCpfOrigem)
+        static void transferencia(List<double> saldos, List<string> cpfs, int indexCpfOrigem, List<string> historico)
         {
             Console.Write("Informe o valor da transferência: ");
             double valorTransferencia = double.Parse(Console.ReadLine());
@@ -162,9 +166,9 @@ namespace byteBank
 
             if (indexCpfDestino != -1)
             {
-                if (sacar(saldos, indexCpfOrigem, valorTransferencia))
+                if (sacar(saldos, indexCpfOrigem, valorTransferencia, historico))
                 {
-                    depositar(saldos, indexCpfDestino, valorTransferencia);
+                    depositar(saldos, indexCpfDestino, valorTransferencia, historico);
                     Console.WriteLine("\nTransferência efetuada com sucesso!");
                 }
                 else
@@ -235,12 +239,18 @@ namespace byteBank
             Console.WriteLine("Conta deletada com sucesso!!\n");
         }
 
-        static void Main(string[] args)
+        static void cadastrarTransacao(string transacao, List<string> historico, int cpfIndex)
+        {
+            historico[cpfIndex] += transacao;
+        }
+
+        static void Main()
         {
             List<string> cpfs = new();
             List<string> titulares = new();
             List<string> senhas = new();
             List<double> saldos = new();
+            List<string> historico = new();
 
             while (true)
             {
@@ -283,7 +293,7 @@ namespace byteBank
                     if (optionWelcome == 2)
                     {
                         Console.Clear();
-                        indexCpfLogado = createAccount(cpfs, titulares, senhas, saldos);
+                        indexCpfLogado = createAccount(cpfs, titulares, senhas, saldos, historico);
                         break;
                     }
                 }
@@ -309,7 +319,7 @@ namespace byteBank
                             showBalance(saldos, indexCpfLogado);
                             break;
                         case 3:
-                            manipulateAccount(cpfs, saldos, indexCpfLogado);
+                            manipulateAccount(cpfs, saldos, indexCpfLogado, historico);
                             break;
                         case 4:
                             updateAccount(cpfs, titulares, senhas, indexCpfLogado);
@@ -319,7 +329,11 @@ namespace byteBank
                             option = 0;
                             break;
                         case 6:
-                            //updateAccount(cpfs, titulares, senhas);
+                            Console.Clear();
+                            Console.WriteLine(historico[indexCpfLogado]);
+                            Console.Write("\nAperte qualquer tecla para ir ao menu...");
+                            Console.ReadLine();
+                            Console.Clear();
                             break;
                         default:
                             Console.WriteLine("Opção inválida\n");
