@@ -84,7 +84,7 @@ namespace byteBank
             Console.WriteLine($"Saldo: {saldos[indexCPFLogado]}");
         }
 
-        static void manipulateAccount(List<string> cpfs, List<double> saldos, int indexCpfLogado, List<string> historico)
+        static void manipulateAccount(List<string> cpfs, List<string> titulares, List<double> saldos, int indexCpfLogado, List<string> historico)
         {
             int option;
 
@@ -125,7 +125,7 @@ namespace byteBank
                         break;
                     case 3:
                         Console.Clear();
-                        transferencia(saldos, cpfs, indexCpfLogado, historico);
+                        transferencia(saldos, titulares, cpfs, indexCpfLogado, historico);
                         break;
                 }
 
@@ -154,7 +154,7 @@ namespace byteBank
             return true;
         }
 
-        static void transferencia(List<double> saldos, List<string> cpfs, int indexCpfOrigem, List<string> historico)
+        static void transferencia(List<double> saldos, List<string> titulares, List<string> cpfs, int indexCpfOrigem, List<string> historico)
         {
             Console.Write("Informe o valor da transferência: ");
             double valorTransferencia = double.Parse(Console.ReadLine());
@@ -166,13 +166,18 @@ namespace byteBank
 
             if (indexCpfDestino != -1)
             {
-                if (sacar(saldos, indexCpfOrigem, valorTransferencia, historico))
+                if (valorTransferencia <= saldos[indexCpfOrigem])
                 {
-                    depositar(saldos, indexCpfDestino, valorTransferencia, historico);
-                    Console.WriteLine("\nTransferência efetuada com sucesso!");
+                    saldos[indexCpfOrigem] -= valorTransferencia;
+                    cadastrarTransacao($"Transferência para o titular {titulares[indexCpfOrigem]} no valor de R$ {valorTransferencia:N2} efetuado com sucesso\n", historico, indexCpfOrigem);
+                    
+                    saldos[indexCpfDestino] += valorTransferencia;
+                    cadastrarTransacao($"Transferência no valor de R$ {valorTransferencia:N2} recebido do titular: {titulares[indexCpfDestino]}\n", historico, indexCpfDestino);
                 }
                 else
-                    Console.WriteLine("\nSaldo insuficiente para transferir!");
+                {
+                    cadastrarTransacao($"Erro na transferência, o valor R$ {valorTransferencia:N2} excede o limite do saldo\n", historico, indexCpfOrigem);
+                }
             }
             else
             {
@@ -284,6 +289,7 @@ namespace byteBank
                         {
                             Console.Clear();
                             Console.WriteLine($"Olá {titulares[indexCpfLogado]}, seja bem vindo!\n");
+                            cadastrarTransacao("Usuário logado com sucesso\n", historico, indexCpfLogado);
                             break;
                         }
 
@@ -294,6 +300,7 @@ namespace byteBank
                     {
                         Console.Clear();
                         indexCpfLogado = createAccount(cpfs, titulares, senhas, saldos, historico);
+                        cadastrarTransacao("Conta criada com sucesso\n", historico, indexCpfLogado);
                         break;
                     }
                 }
@@ -310,7 +317,8 @@ namespace byteBank
                     switch (option)
                     {
                         case 0:
-                            Console.WriteLine("Saindo da conta, Bye Bye!!");
+                            Console.WriteLine("Saindo da conta, Bye Bye!!\n");
+                            cadastrarTransacao("Saindo da conta\n", historico, indexCpfLogado);
                             break;
                         case 1:
                             detailUser(cpfs, titulares, saldos, indexCpfLogado);
@@ -319,7 +327,7 @@ namespace byteBank
                             showBalance(saldos, indexCpfLogado);
                             break;
                         case 3:
-                            manipulateAccount(cpfs, saldos, indexCpfLogado, historico);
+                            manipulateAccount(cpfs, titulares, saldos, indexCpfLogado, historico);
                             break;
                         case 4:
                             updateAccount(cpfs, titulares, senhas, indexCpfLogado);
