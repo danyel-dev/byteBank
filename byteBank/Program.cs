@@ -185,7 +185,7 @@ namespace byteBank
             }
         }
 
-        static void updateAccount(List<string> cpfs, List<string> titulares, List<string> senhas, int indexCpfLogado)
+        static void updateAccount(List<string> cpfs, List<string> titulares, List<string> senhas, int indexCpfLogado, List<string> historico)
         {
             int option;
 
@@ -197,10 +197,10 @@ namespace byteBank
 
                 switch (option) {
                     case 1:
-                        updateName(titulares, indexCpfLogado);
+                        updateName(titulares, indexCpfLogado, historico);
                         break;
                     case 2:
-                        updatePassword(senhas, indexCpfLogado);
+                        updatePassword(senhas, indexCpfLogado, historico);
                         break;
                     default:
                         Console.Clear();
@@ -212,24 +212,27 @@ namespace byteBank
             Console.Clear();
         }
 
-        static void updateName(List<string> titulares, int cpfIndex)
+        static void updateName(List<string> titulares, int cpfIndex, List<string> historico)
         {
             Console.Clear();
             Console.Write("Informe o novo nome: ");
             string newHolder = Console.ReadLine();
 
             titulares[cpfIndex] = newHolder;
+            cadastrarTransacao($"Nome alterado para {newHolder}\n", historico, cpfIndex);
 
             Console.WriteLine("\nNome Alterado com sucesso!!\n");
         }
 
-        static void updatePassword(List<string> senhas, int cpfIndex)
+        static void updatePassword(List<string> senhas, int cpfIndex, List<string> historico)
         {
             Console.Clear();
             Console.Write("Informe a nova senha: ");
             string newPassword = Console.ReadLine();
 
             senhas[cpfIndex] = newPassword;
+            cadastrarTransacao($"Senha alterada com sucesso\n", historico, cpfIndex);
+
             Console.WriteLine("\nSenha Alterada com sucesso!!\n");
         }
 
@@ -330,7 +333,7 @@ namespace byteBank
                             manipulateAccount(cpfs, titulares, saldos, indexCpfLogado, historico);
                             break;
                         case 4:
-                            updateAccount(cpfs, titulares, senhas, indexCpfLogado);
+                            updateAccount(cpfs, titulares, senhas, indexCpfLogado, historico);
                             break;
                         case 5:
                             deleteUser(cpfs, titulares, senhas, saldos, indexCpfLogado);
