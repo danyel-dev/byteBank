@@ -16,14 +16,7 @@ namespace byteBank
 
                     do
                     {
-                        Console.WriteLine(" 1 - Criar conta");
-                        Console.WriteLine(" 2 - Logar");
-                        Console.WriteLine(" 0 - Sair do programa\n");
-                        Console.Write(" Informe uma das opções acima: ");
-
-                        optionMenuInitial = int.Parse(Console.ReadLine());
-
-                        Console.Clear();
+                        optionMenuInitial = Menus.MenuInitial();
 
                         switch (optionMenuInitial)
                         {
@@ -35,7 +28,7 @@ namespace byteBank
                             case 1:
                                 Console.WriteLine(" Olá, seja bem-vindo. para criar uma conta, nos informe seus dados corretamente^^\n");
 
-                                Console.Write(" Nome: ");
+                                Console.Write(" Nome completo: ");
                                 string name = Console.ReadLine();
 
                                 Console.Write(" Nome de usuário: ");
@@ -80,19 +73,14 @@ namespace byteBank
                                     else
                                     {
                                         Console.Clear();
-                                        Console.ForegroundColor = ConsoleColor.Red;
-                                        Console.WriteLine(" CPF não encontrado! Informe-o corretamente.\n");
-                                        Console.ResetColor();
+                                        Messages.MessageError("CPF não encontrado! Informe - o corretamente.");
                                     }
                                 }
 
                                 Console.Clear();
                                 break;
                             default:
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine(" Opção não encontrada!\n");
-                                Console.ResetColor();
-
+                                Messages.MessageError("Opção não encontrada!");
                                 break;
                         }
                     } while (optionMenuInitial != 0);
@@ -103,27 +91,15 @@ namespace byteBank
 
                     while (true)
                     {
-                        Console.WriteLine($" Olá {bank.ActiveAccount.User.Name}!");
-                        Console.WriteLine($" Saldo em conta: R$ {bank.ActiveAccount.Balance:F2}\n");
-
-                        Console.WriteLine(" [1] - Informações da conta");
-                        Console.WriteLine(" [2] - Sacar");
-                        Console.WriteLine(" [3] - Depositar");
-                        Console.WriteLine(" [4] - Transferir");
-                        Console.WriteLine(" [5] - Histórico de transações");
-                        Console.WriteLine(" [6] - Editar conta");
-                        Console.WriteLine(" [7] - Deletar conta");
-                        Console.WriteLine(" [0] - Logout\n");
-
-                        Console.Write(" Selecione a opção desejada: ");
-                        int optionMenuAccount = int.Parse(Console.ReadLine());
-
-                        Console.Clear();
+                        int optionMenuAccount = Menus.MenuAccount(bank.ActiveAccount.User.Name, bank.ActiveAccount.Balance);
 
                         switch (optionMenuAccount)
                         {
                             case 1:
-                                Console.WriteLine(" Opção 01 digitada\n");
+                                bank.ActiveAccount.InfoAccount();
+                                Console.Write("\n Aperte qualquer tecla para voltar ao menu anterior... ");
+                                Console.ReadLine();
+                                Console.Clear();
                                 break;
                             case 2:
                                 Console.WriteLine(" Opção 02 digitada\n");
@@ -147,9 +123,7 @@ namespace byteBank
                                 flagMenuAccount = true;
                                 break;
                             default:
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine(" Opção incorreta! informe um número válido.\n");
-                                Console.ResetColor();
+                                Messages.MessageError("Opção incorreta! informe um número válido.");
                                 break;
                         }
 
