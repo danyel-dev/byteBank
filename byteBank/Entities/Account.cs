@@ -2,7 +2,7 @@
 public class Account
 {
     public readonly User User;
-    public readonly double Balance;
+    public double Balance { get; set; }
 
     public Account(User user)
     {

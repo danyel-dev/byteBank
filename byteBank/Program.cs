@@ -6,14 +6,15 @@ namespace byteBank
         static void Main()
         {
             Bank bank = new();
+
             bool flag = false;
 
             while (flag == false)
             {
-                if (bank.ActiveAccount == null)
+                if (bank.AccountIndex == -1)
                 {
                     int optionMenuInitial;
-
+                    
                     do
                     {
                         optionMenuInitial = Menus.MenuInitial();
@@ -63,9 +64,9 @@ namespace byteBank
 
                                     cpf = Console.ReadLine();
 
-                                    bank.ActiveAccount = Bank.FindAccount(cpf);
+                                    bank.AccountIndex = Bank.FindIndexAccount(cpf);
 
-                                    if (bank.ActiveAccount != null || cpf == "0")
+                                    if (bank.AccountIndex != -1 || cpf == "0")
                                     {
                                         optionMenuInitial = 0;
                                         break;
@@ -91,18 +92,27 @@ namespace byteBank
 
                     while (true)
                     {
-                        int optionMenuAccount = Menus.MenuAccount(bank.ActiveAccount.User.Name, bank.ActiveAccount.Balance);
+                        int optionMenuAccount = Menus.MenuAccount(Bank.AccountList[bank.AccountIndex].User.Name, Bank.AccountList[bank.AccountIndex].Balance);
 
                         switch (optionMenuAccount)
                         {
                             case 1:
-                                bank.ActiveAccount.InfoAccount();
+                                Bank.AccountList[bank.AccountIndex].InfoAccount();
                                 Console.Write("\n Aperte qualquer tecla para voltar ao menu anterior... ");
                                 Console.ReadLine();
                                 Console.Clear();
                                 break;
                             case 2:
-                                Console.WriteLine(" Opção 02 digitada\n");
+                                Console.Write(" Informe o valor que deseja depositar: ");
+                                double valueDeposit = double.Parse(Console.ReadLine());
+
+                                Console.Clear();
+
+                                if(bank.Deposit(valueDeposit))
+                                    Messages.MessageSuccess("Depósito efetuado com sucesso.");
+                                else
+                                    Messages.MessageError("Depósito não efetuado.");
+
                                 break;
                             case 3:
                                 Console.WriteLine(" Opção 03 digitada\n");
@@ -131,7 +141,7 @@ namespace byteBank
                             break;
                     }
 
-                    bank.ActiveAccount = null;
+                    bank.AccountIndex = -1;
                 }
             }
         }

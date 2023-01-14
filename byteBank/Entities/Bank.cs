@@ -1,13 +1,14 @@
 ﻿
 public class Bank
 {
-    public static List<Account>? AccountList { get; private set; }
+    public static List<Account> AccountList { get; private set; }
 
-    private Account? _ActiveAccount;
+    public int AccountIndex { get; set; }
 
     public Bank()
     {
         AccountList = new List<Account>();
+        AccountIndex = -1;
     }
 
     public static void AddAccount(Account account)
@@ -15,19 +16,17 @@ public class Bank
         AccountList.Add(account);
     }
 
-    public Account? ActiveAccount
+    public bool Deposit(double value)
     {
-        get { return _ActiveAccount; }
-        set { _ActiveAccount = value; }
+        if (AccountIndex == -1)
+            return false;
+
+        AccountList[AccountIndex].Balance += value;
+        return true;
     }
 
-    public static Account? FindAccount(string cpf)
+    public static int FindIndexAccount(string cpf)
     {
-        Account account = AccountList.Find(account => account.User.CPF == cpf);
-
-        if (account != null)
-            return account;
-
-        return null;
+        return AccountList.FindIndex(account => account.User.CPF == cpf);
     }
 }
