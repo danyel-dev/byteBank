@@ -115,13 +115,45 @@ namespace byteBank
 
                                 break;
                             case 3:
-                                Console.WriteLine(" Opção 03 digitada\n");
+                                Console.Write(" Informe o valor que deseja sacar: ");
+                                double valueToWithdraw = double.Parse(Console.ReadLine());
+
+                                Console.Clear();
+
+                                if (bank.ToWithdraw(valueToWithdraw))
+                                    Messages.MessageSuccess("Saque efetuado com sucesso.");
+                                else
+                                    Messages.MessageError("Saque não efetuado, saldo insuficiente");
+
                                 break;
                             case 4:
-                                Console.WriteLine(" Opção 04 digitada\n");
+                                Console.Write(" Informe o CPF do destinatário: ");
+                                string recipientCPF = Console.ReadLine();
+
+                                int recipientIndex = Bank.FindIndexAccount(recipientCPF);
+
+                                if(recipientIndex != -1)
+                                {
+                                    Console.Write(" Informe o valor que deseja transferir: ");
+                                    double transferAmount = double.Parse(Console.ReadLine());
+
+                                    Console.Clear();
+
+                                    if (bank.Transfer(transferAmount, recipientIndex))
+                                        Messages.MessageSuccess("Transferência efetuada com sucesso!");
+                                    else
+                                        Messages.MessageError("Saldo insuficiente para transferir");
+                                } else
+                                {
+                                    Console.Clear();
+                                    Messages.MessageError("CPF do destinatário não encontrado.");
+                                }
+
                                 break;
                             case 5:
-                                Console.WriteLine(" Opção 05 digitada\n");
+                                Bank.AccountList[bank.AccountIndex].showTransactions();
+                                Console.ReadLine();
+
                                 break;
                             case 6:
                                 Console.WriteLine(" Opção 06 digitada\n");

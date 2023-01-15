@@ -20,8 +20,8 @@
         Console.WriteLine($" Saldo em conta: R$ {balance:F2}\n");
 
         Console.WriteLine(" [1] - Informações da conta");
-        Console.WriteLine(" [3] - Depositar");
-        Console.WriteLine(" [2] - Sacar");
+        Console.WriteLine(" [2] - Depositar");
+        Console.WriteLine(" [3] - Sacar");
         Console.WriteLine(" [4] - Transferir");
         Console.WriteLine(" [5] - Histórico de transações");
         Console.WriteLine(" [6] - Editar conta");
