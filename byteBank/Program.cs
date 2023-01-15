@@ -9,8 +9,6 @@ namespace byteBank
 
             bool flag = false;
 
-
-
             while (flag == false)
             {
                 if (bank.AccountIndex == -1)
