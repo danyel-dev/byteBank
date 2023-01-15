@@ -108,7 +108,7 @@ namespace byteBank
 
                                 Console.Clear();
 
-                                if(bank.Deposit(valueDeposit))
+                                if (Bank.AccountList[bank.AccountIndex].Deposit(valueDeposit))
                                     Messages.MessageSuccess("Depósito efetuado com sucesso.");
                                 else
                                     Messages.MessageError("Depósito não efetuado.");
@@ -120,7 +120,7 @@ namespace byteBank
 
                                 Console.Clear();
 
-                                if (bank.ToWithdraw(valueToWithdraw))
+                                if (Bank.AccountList[bank.AccountIndex].ToWithdraw(valueToWithdraw))
                                     Messages.MessageSuccess("Saque efetuado com sucesso.");
                                 else
                                     Messages.MessageError("Saque não efetuado, saldo insuficiente");
@@ -139,7 +139,7 @@ namespace byteBank
 
                                     Console.Clear();
 
-                                    if (bank.Transfer(transferAmount, recipientIndex))
+                                    if (Bank.AccountList[bank.AccountIndex].Transfer(transferAmount, Bank.AccountList[recipientIndex]))
                                         Messages.MessageSuccess("Transferência efetuada com sucesso!");
                                     else
                                         Messages.MessageError("Saldo insuficiente para transferir");
@@ -151,8 +151,8 @@ namespace byteBank
 
                                 break;
                             case 5:
-                                Bank.AccountList[bank.AccountIndex].showTransactions();
-                                Console.ReadLine();
+                                Bank.AccountList[bank.AccountIndex].ShowTransactions();
+                                Console.Clear();
 
                                 break;
                             case 6:
