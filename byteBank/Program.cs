@@ -17,7 +17,7 @@ namespace byteBank
                     
                     do
                     {
-                         optionMenuInitial = Menus.MenuInitial();
+                        optionMenuInitial = Menus.MenuInitial();
 
                         switch (optionMenuInitial)
                         {
